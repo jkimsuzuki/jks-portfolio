@@ -1,0 +1,42 @@
+/*
+ * This is a manifest file that'll be compiled into application.css.
+ *
+ * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
+ * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
+ * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
+ * depending on specificity.
+ *
+ * Consider organizing styles into separate files for maintainability.
+ */
+:root {
+  --bg: #0a0c0a;          /* near-black canvas */
+  --surface: #10130f;     /* panels */
+  --border: #1f261b;      /* hairline borders */
+
+  --fg: #e4e8de;          /* primary text */
+  --fg-muted: #8a937e;    /* secondary text */
+  --fg-dim: #59624e;      /* labels, hints */
+
+  --lime: #c5e84a;        /* the one accent */
+  --lime-dim: #93a05a;    /* dimmed section labels */
+
+  --c-incident: #ef5b52;  --c-improvement: #5ba8f0;
+  --c-automation: #eba23a; --c-security: #b594f0; --c-support: #4fd6ce;
+
+  --mono: "JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0; 
+  padding: 0;
+  background-color: var(--bg);
+  color: var(--fg);
+  font-family: var(--mono);
+}
+
