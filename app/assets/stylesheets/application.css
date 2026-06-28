@@ -40,3 +40,19 @@ body {
   font-family: var(--mono);
 }
 
+.app-layout {
+  display: flex;
+  flex-direction: row;
+  min-height: 100vh;
+}
+
+.sidebar {
+  background-color: var(--surface);
+  border-right: 1px solid var(--border);
+  width: 220px;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+}
