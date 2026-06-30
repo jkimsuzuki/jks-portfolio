@@ -204,10 +204,22 @@ Sections top to bottom:
 ---
 
 ## Current status
-**Day 1 in progress.**
-Completed: scaffold, CSS tokens, base reset, JetBrains Mono font link, layout shell (`application.html.erb`), sidebar partial (`_sidebar.html.erb`).
-Still to do: pages controller + root route.
-**Next:** Finish Day 1 (controller + route), then start Day 2 — overview.exe.
+**Day 1 complete.**
+
+### What was built
+- `app/assets/stylesheets/application.css` — CSS custom properties (tokens), `*` reset, body base styles, `.app-layout` flex layout, `.sidebar` (220px fixed, dark surface, right border), `.main-content` (flex: 1)
+- `app/views/layouts/application.html.erb` — JetBrains Mono loaded via Google Fonts, two-column layout shell (`app-layout` → `sidebar` + `main-content`), sidebar partial rendered
+- `app/views/layouts/_sidebar.html.erb` — `jks-signature-logo.svg`, nav links with `<span class="chevron">` prefix, `<hr>` separator, `// MISSION` block, `//` cursor divider, `> _` cursor
+- `app/controllers/pages_controller.rb` — `PagesController < ApplicationController` with empty `overview` action
+- `config/routes.rb` — `root "pages#overview"`
+- `app/views/pages/overview.html.erb` — placeholder view
+
+### Notes for next session
+- `--c-idea: #8a937e` is missing from CSS tokens — add before Day 5 (experiments.exe)
+- Controller indentation on `def overview` is loose — not breaking but worth tidying
+- Postgres.app must be running before starting the server — run `bin/rails db:create` if not done yet
+
+**Next:** Day 2 — overview.exe. Build all four rows: hero + journey snapshot, stats bar, active experiments + activity log, systems + core values.
 
 Update this section at the end of every session with what was completed
 and what comes next.
