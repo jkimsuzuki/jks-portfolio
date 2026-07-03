@@ -69,6 +69,7 @@ nav ul {
   list-style: none;
   padding: 0;
   margin: 0;
+  margin-bottom: 40px;
 }
 
 nav ul li a {
@@ -142,6 +143,18 @@ nav {
 .journey-panel {
   flex: 2;
 }
+
+.journey-timeline {
+  display: flex;
+  font-size: 10px;
+  list-style: none;
+  text-align: center;
+  gap: 25px;
+}
+
+.journey-timeline-item-title{
+  margin-bottom: 30px;
+}
   /* stats section */
 .stat-tile-item {
   flex: 1;
@@ -182,6 +195,11 @@ nav {
 .tag-idea {
   border-color: var(--c-idea);
   color: var(--c-idea);
+}
+
+.active-experiments-list {
+  list-style-position: inside;
+  padding: 0;
 }
 
   /* systems I work with section and core values section */
