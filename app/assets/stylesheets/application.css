@@ -8,6 +8,7 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+ /* GLOBAL STYLES */
 :root {
   --bg: #0a0c0a;          /* near-black canvas */
   --surface: #10130f;     /* panels */
@@ -18,10 +19,11 @@
   --fg-dim: #59624e;      /* labels, hints */
 
   --lime: #c5e84a;        /* the one accent */
-  --lime-dim: #93a05a;    /* dimmed section labels */
+  --lime-dim: #829e1e;    /* dimmed section labels */
+  --lime-darker: #192000; /* hover background for sidebar links */   
 
-  --c-incident: #ef5b52;  --c-improvement: #5ba8f0;
-  --c-automation: #eba23a; --c-security: #b594f0; --c-support: #4fd6ce;
+  --c-incident: #ef5b52;  --c-improvement: #5ba8f0; --c-idea: #1491cb;
+  --c-automation: #eba23a; --c-security: #b594f0; --c-support: #4fd6ce; --c-in-progress: #ddc617;
 
   --mono: "JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace;
 }
@@ -46,13 +48,160 @@ body {
   min-height: 100vh;
 }
 
-.sidebar {
-  background-color: var(--surface);
-  border-right: 1px solid var(--border);
-  width: 220px;
-}
-
 .main-content {
   flex: 1;
   padding: 20px;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 240px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 20px;
+  margin-top: 30px;
+  margin-left: 30px;
+  margin-bottom: 30px;
+  background-color: var(--surface);
+}
+
+nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+nav ul li a {
+  display: block;
+  padding: 10px 16px;
+  color: var(--fg-muted);
+  text-decoration: none;
+}
+
+nav ul li a:hover {
+  background-color: var(--lime-darker);
+  border-radius: 4px;
+  color: var(--lime);
+}
+
+nav ul li a.active {
+  background-color: var(--lime-darker);
+  border-radius: 4px;
+  color: var(--lime);
+}
+
+.mission-statement {
+  margin-top: auto;
+}
+
+.mission-block {
+  font-size: 14px;
+  color: var(--lime-dim);
+}
+
+.mission-description {
+  margin-top: 30px;
+  font-size: 18px;
+  color: var(--lime);
+}
+
+.logo {
+  width: 160px;
+}
+
+nav {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* OVERVIEW PAGE */
+.overview-row {
+  display: flex;
+}
+
+.section-title {
+  color: var(--lime-dim);
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.panel {
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 20px;
+  margin: 10px;
+  background-color: var(--surface);
+}
+
+  /* hero section */
+.hero-panel {
+  flex: 1;
+}
+  /* journey section */
+.journey-panel {
+  flex: 2;
+}
+  /* stats section */
+.stat-tile-item {
+  flex: 1;
+  text-align: center;
+  border-right: 1px solid var(--border);
+}
+
+.stat-tile-item:last-child {
+  border-right: none;
+}
+
+.stat-tile-item-title {
+  font-size: 14px;
+  color: var(--fg-dim);
+  margin-bottom: 5px;
+}
+
+.stat-tile-item-value {
+  font-size: 24px;
+  color: var(--fg);
+}
+
+  /* active experiments section */
+.tag {
+  display: inline-block;
+  padding: 5px 10px;
+  border: 1px solid;
+  border-radius: 3px;
+  font-size: 12px;
+  margin-right: 5px;
+}
+
+.tag-in-progress {
+  border-color: var(--c-in-progress);
+  color: var(--c-in-progress);
+}
+
+.tag-idea {
+  border-color: var(--c-idea);
+  color: var(--c-idea);
+}
+
+  /* systems I work with section and core values section */
+
+.core-values-list, .systems-work-with-list {
+  display: flex;
+  flex: 1;
+  list-style: none;
+  padding: 0;
+  font-size: 12px;
+}
+
+.core-values-item-title {
+  margin-right: 7px;
+}
+
+.core-values-item-symbol {
+  color: var(--lime);
+}
+
+.systems-work-with, .core-values {
+  flex: 1;
 }
