@@ -183,8 +183,10 @@ nav {
   padding: 5px 10px;
   border: 1px solid;
   border-radius: 3px;
-  font-size: 12px;
+  font-size: 10px;
+  text-align: center;
   margin-right: 5px;
+  flex: 0 0 100px;
 }
 
 .tag-in-progress {
@@ -197,9 +199,24 @@ nav {
   color: var(--c-idea);
 }
 
+.active-experiments-item-title {
+  flex: 2; 
+}
+
 .active-experiments-list {
   list-style-position: inside;
   padding: 0;
+}
+
+.active-experiments-item {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.active-experiments-item-subtitle {
+  flex: 3;
 }
 
   /* systems I work with section and core values section */
