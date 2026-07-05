@@ -178,6 +178,39 @@ in an interview. That only happens if he writes the code himself.
 
 ---
 
+## about.exe — page design (from mockup)
+
+**Header row (two columns):**
+- Left: `ABOUT.EXE` label + headline "Purpose. Progress. Possibility." + subtext "This is my learning operating system—an evolving space where I build skills, solve problems, and create impact."
+- Right: `QUICK STATS` panel — 4 tiles: Systems Built, Active Experiments, Real-World Cases, Resources Curated (each with icon + number + label)
+
+**Row 2 (two columns):**
+- Left: `ABOUT ME` panel — JKS logo in circle, "JKS" heading, "Aspiring Shopify RIR Engineer" subtitle, bio text, detail items (location, started date, always learning, leveling up daily)
+- Right: `MISSION` panel — "Become a Shopify RIR Engineer" in large lime, mission description, 4 mission items with icons: Deliver Impact, Never Stop Learning, Share & Collaborate, Measure & Improve
+
+**Row 3 (full width):**
+- `CORE VALUES` panel — 5 tiles horizontally: CURIOSITY, INITIATIVE, INTEGRITY, EMPATHY, RESILIENCE — each with icon, name in caps, 3-line description
+
+**Row 4 (full width):**
+- `TECH I WORK WITH` panel — two rows of tech icons: Ruby on Rails, PostgreSQL, Linux, Docker, AWS, Shopify / Git, VS Code, Postman, Figma, Notion, Slack
+
+**Right column (alongside rows 3-4):**
+- `CURRENT FOCUS` panel — 3 items with `>` arrows: Shopify platform knowledge, RIR troubleshooting expertise, contributing to developer community
+- `LET'S CONNECT` panel — GitHub, LinkedIn, Email with handles
+
+**Footer:**
+- `> Keep building. Keep learning. Keep leveling up.` in lime
+- `System status: Always improving ●`
+
+**Notes:**
+- Location: Hakodate, Japan
+- GitHub: https://github.com/jkimsuzuki
+- LinkedIn: https://www.linkedin.com/in/joseph-kim-suzuki/
+- Email: jkimsuzuki@gmail.com
+- Quick stats: Systems Built 1, Active Experiments 2 — Real-World Cases and Resources Curated TBD
+
+---
+
 ## overview.exe — page design (from mockup)
 
 Sections top to bottom:
@@ -204,22 +237,39 @@ Sections top to bottom:
 ---
 
 ## Current status
-**Day 1 complete.**
+**Day 2 complete.**
 
-### What was built
-- `app/assets/stylesheets/application.css` — CSS custom properties (tokens), `*` reset, body base styles, `.app-layout` flex layout, `.sidebar` (220px fixed, dark surface, right border), `.main-content` (flex: 1)
-- `app/views/layouts/application.html.erb` — JetBrains Mono loaded via Google Fonts, two-column layout shell (`app-layout` → `sidebar` + `main-content`), sidebar partial rendered
-- `app/views/layouts/_sidebar.html.erb` — `jks-signature-logo.svg`, nav links with `<span class="chevron">` prefix, `<hr>` separator, `// MISSION` block, `//` cursor divider, `> _` cursor
+### What was built — Day 1
+- `app/assets/stylesheets/application.css` — CSS tokens, reset, body, `.app-layout`, `.sidebar`, `.main-content`
+- `app/views/layouts/application.html.erb` — JetBrains Mono via Google Fonts, layout shell, sidebar partial rendered
+- `app/views/layouts/_sidebar.html.erb` — `jks-signature-logo.svg` via `image_tag`, nav links with chevron spans, `<hr>`, `// MISSION` block, `> _` cursor
 - `app/controllers/pages_controller.rb` — `PagesController < ApplicationController` with empty `overview` action
 - `config/routes.rb` — `root "pages#overview"`
-- `app/views/pages/overview.html.erb` — placeholder view
 
-### Notes for next session
-- `--c-idea: #8a937e` is missing from CSS tokens — add before Day 5 (experiments.exe)
-- Controller indentation on `def overview` is loose — not breaking but worth tidying
-- Postgres.app must be running before starting the server — run `bin/rails db:create` if not done yet
+### What was built — Day 2
+- `app/views/pages/overview.html.erb` — hero panel, journey snapshot (8 stops), stats bar (4 tiles), active experiments (2 entries with tags), systems (6 tools), core values (6 values)
+- `app/assets/stylesheets/application.css` — all overview row layouts, `.panel` shared styles, stat tile styles, tag styles, sidebar nav styles, active nav state, mission block, systems horizontal layout
 
-**Next:** Day 2 — overview.exe. Build all four rows: hero + journey snapshot, stats bar, active experiments + activity log, systems + core values.
+### Design decisions made
+- Removed activity log panel — full-width active experiments instead
+- Real stats: PROJECTS 2, INCIDENTS 50+, YEARS IN SUPPORT 7+, LANGUAGES 4
+- `--lime-dim` changed to `#829e1e`
+- `--lime-darker: #192000` added for hover/active nav state
+- `--c-in-progress: #ddc617` (yellow), `--c-idea: #1491cb` (blue) added
+- `nav` is `display: flex; flex-direction: column` — `margin-top: auto` pushes mission to bottom
+- `list-style-position: inside` on active experiments list fixes overflow
+
+### Polish items saved for Day 13
+- Journey snapshot timeline icons and text squishing
+- Systems icons above tool names
+- Active nav vs hover state differentiation
+- Hover tooltip on stats tiles
+
+### Notes
+- Postgres.app must be running before starting the server
+- Active nav `class="active"` is hardcoded on overview.exe — needs Rails helper later
+
+**Next:** Day 3 — about.exe
 
 Update this section at the end of every session with what was completed
 and what comes next.

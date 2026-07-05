@@ -11,9 +11,12 @@
     <%= yield :head %>
     <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
     <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
+    <link rel="icon" type="image/png" sizes="128x128" href="/jks-favicon-128.png">
+    <link rel="icon" type="image/png" sizes="64x64" href="/jks-favicon-64.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/jks-favicon-32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/jks-favicon-16.png">
+    <link rel="shortcut icon" href="/jks-favicon.ico">
+    <link rel="apple-touch-icon" href="/jks-favicon-128.png">
     <!-- JetBrains Mono from Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
