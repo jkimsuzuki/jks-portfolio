@@ -13,4 +13,7 @@ class PagesController < ApplicationController
 
   def journal
   end
+
+  def learnings
+  end
 end
