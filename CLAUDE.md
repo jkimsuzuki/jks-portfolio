@@ -41,25 +41,23 @@ Page title shown at very top: `THE OPERATIONS TERMINAL`.
 Navigation items are named like executables:
 
 ```
-overview.exe    → front door, headline, stats, journey, activity log
-systems.exe     → tools and stack (with versions + ACTIVE status)
-experiments.exe → projects (SignalDesk, this portfolio, ideas)
-cases.exe       → real incident/troubleshooting cases
-journal.exe     → learning log and reflections
-learnings.exe   → courses, resources, progress tracking
-about.exe       → bio, values, mission, contact
+overview.exe    → front door, stats, journey snapshot, active experiments, systems, core values
+systems.exe     → tools and stack (with versions + ACTIVE status + real logos)
+experiments.exe → projects (SignalDesk, this portfolio, ideas) — real model, CRUD
+journal.exe     → learning log and reflections — real model, CRUD, calendar
+learnings.exe   → courses, resources, progress tracking — real model, CRUD
+about.exe       → bio, core values, tech stack, connect
 ```
+
+Note: cases.exe was removed from the portfolio — all cases are documented in SignalDesk.
 
 The sidebar is persistent across all pages and always shows:
 - `jks—` handwritten signature SVG logo at top (file: `jks-signature-logo.svg`)
 - Nav links, each prefixed with `>` chevron
   - Inactive: `> systems.exe` (chevron in `--fg-dim`, text in `--fg-muted`)
   - Active: full row highlighted lime (`background: var(--lime); color: var(--bg)`)
-- Horizontal rule separator
-- `// MISSION` label in `--lime-dim`
-- "Become a Shopify RIR Engineer" in large `--lime` text (multi-line)
-- `//` divider line
-- `> _` blinking cursor at bottom
+- `> _` blinking cursor at bottom (mission block removed)
+- Active nav state uses `current_page?` Rails helper
 
 ---
 
@@ -107,30 +105,31 @@ The sidebar is persistent across all pages and always shows:
 ---
 
 ## Tech stack
-- **Ruby on Rails 8**, ERB templates, plain CSS (no Tailwind, no JS frameworks)
-- PostgreSQL
-- Deployed on **Koyeb** (same as SignalDesk)
-- Docker + GitHub Actions CI
+- **Ruby on Rails 8.1.3**, ERB templates, plain CSS (no Tailwind, no JS frameworks)
+- **PostgreSQL** (local via Postgres.app for dev, **Neon** serverless Postgres for production)
+- Deployed on **Northflank** (inside signaldesk-observability project, free tier, 2 services)
+- Live URL: `p01--jks-portfolio--w2hqm5zlsbps.code.run`
+- Docker + GitHub Actions CI (CI/CD auto-deploys on push to main)
+- Ruby 4.0.3
 - No Tailwind — plain CSS with the token system above
 
 ---
 
-## Build plan (14 days, 90 min sessions)
+## Build plan (completed)
 ```
-Day  1 — Scaffold + tokens + layout shell + sidebar partial   [10%]
-Day  2 — overview.exe                                         [20%]
-Day  3 — about.exe                                            [28%]
-Day  4 — system.exe                                           [37%]
-Day  5 — experiments.exe (static)                             [46%]
-Day  6 — cases.exe (static)                                   [54%]
-Day  7 — journal.exe (static)                                 [62%]
-Day  8 — learnings.exe (static)                               [70%]
-Day  9 — Journal → real model                                 [78%]
-Day 10 — Cases → real model                                   [84%]
-Day 11 — Experiments → real model                             [89%]
-Day 12 — Learnings → real model                               [93%]
-Day 13 — Polish pass                                          [97%]
-Day 14 — Deploy + domain                                     [100%]
+Day  1 — Scaffold + tokens + layout shell + sidebar partial   ✅
+Day  2 — overview.exe                                         ✅
+Day  3 — about.exe                                            ✅
+Day  4 — systems.exe                                          ✅
+Day  5 — experiments.exe (static)                             ✅
+Day  6 — cases.exe → REMOVED (cases live in SignalDesk)       ✅
+Day  7 — journal.exe                                          ✅
+Day  8 — learnings.exe                                        ✅
+Day  9 — Journal → real model (JournalEntry)                  ✅
+Day 10 — Experiments → real model (Experiment)                ✅
+Day 11 — Learnings → real model (Learning)                    ✅
+Day 12 — Polish pass                                          ✅
+Day 13 — Deploy to Northflank + Neon                          ✅
 ```
 
 ---
@@ -237,39 +236,53 @@ Sections top to bottom:
 ---
 
 ## Current status
-**Day 2 complete.**
+**DEPLOYED. Build complete.**
 
-### What was built — Day 1
-- `app/assets/stylesheets/application.css` — CSS tokens, reset, body, `.app-layout`, `.sidebar`, `.main-content`
-- `app/views/layouts/application.html.erb` — JetBrains Mono via Google Fonts, layout shell, sidebar partial rendered
-- `app/views/layouts/_sidebar.html.erb` — `jks-signature-logo.svg` via `image_tag`, nav links with chevron spans, `<hr>`, `// MISSION` block, `> _` cursor
-- `app/controllers/pages_controller.rb` — `PagesController < ApplicationController` with empty `overview` action
-- `config/routes.rb` — `root "pages#overview"`
+Live at: `p01--jks-portfolio--w2hqm5zlsbps.code.run`
 
-### What was built — Day 2
-- `app/views/pages/overview.html.erb` — hero panel, journey snapshot (8 stops), stats bar (4 tiles), active experiments (2 entries with tags), systems (6 tools), core values (6 values)
-- `app/assets/stylesheets/application.css` — all overview row layouts, `.panel` shared styles, stat tile styles, tag styles, sidebar nav styles, active nav state, mission block, systems horizontal layout
+### What was built
+- Full Rails 8 app with 6 pages: overview, systems, experiments, journal, learnings, about
+- 3 real models with CRUD: `JournalEntry`, `Experiment`, `Learning`
+- CSS design token system, dark terminal aesthetic, JetBrains Mono
+- Journey snapshot timeline — CSS dots + dashed line between title and subtitle
+- Systems page with real Simple Icons CDN logos
+- Active experiments on overview pulled from DB
+- PROJECTS stat dynamic via `Experiment.count`
+- Active nav state via `current_page?` Rails helper
+- Journal page with calendar showing days with entries
+- Learnings page with progress bars and category breakdown
+- Sidebar: logo, nav links, `> _` cursor (mission block removed)
 
-### Design decisions made
-- Removed activity log panel — full-width active experiments instead
-- Real stats: PROJECTS 2, INCIDENTS 50+, YEARS IN SUPPORT 7+, LANGUAGES 4
-- `--lime-dim` changed to `#829e1e`
-- `--lime-darker: #192000` added for hover/active nav state
-- `--c-in-progress: #ddc617` (yellow), `--c-idea: #1491cb` (blue) added
-- `nav` is `display: flex; flex-direction: column` — `margin-top: auto` pushes mission to bottom
-- `list-style-position: inside` on active experiments list fixes overflow
+### Models
+- `JournalEntry` — title, body, entry_type, tags, entry_date
+- `Experiment` — name, description, status, experiment_date, url
+- `Learning` — name, resource_type, topic, description, url, progress
 
-### Polish items saved for Day 13
-- Journey snapshot timeline icons and text squishing
-- Systems icons above tool names
-- Active nav vs hover state differentiation
-- Hover tooltip on stats tiles
+### Key design decisions
+- cases.exe removed — all cases live in SignalDesk
+- Hero panel removed from overview — journey snapshot spans full width
+- Active experiments spans full width on overview
+- Systems icons: Simple Icons CDN (`cdn.simpleicons.org/{slug}/c7e94d`)
+  - VS Code and Slack removed from CDN (trademark) — use text fallbacks `VS`, `SL`
+  - Northflank not on CDN — text fallback `NF`
+- `database.yml` production uses `DATABASE_URL` env var pointing to Neon
+  - Solid Cache/Queue/Cable all inherit the same Neon URL via YAML anchors
 
-### Notes
-- Postgres.app must be running before starting the server
-- Active nav `class="active"` is hardcoded on overview.exe — needs Rails helper later
+### Deployment
+- Platform: Northflank (signaldesk-observability project, free tier)
+- Database: Neon (PostgreSQL 16, ap-southeast-1)
+- CI/CD: auto-deploys on push to `main` via GitHub integration
+- Run `bundle exec rails db:migrate` via Northflank shell after schema changes
+- `RAILS_MASTER_KEY` and `DATABASE_URL` set as runtime secrets in Northflank
 
-**Next:** Day 3 — about.exe
+### Dev notes
+- Postgres.app must be running before starting the local server
+- `--lime-dim` is `#829e1e`
+- `--lime-darker: #192000` for hover/active nav state
+
+### What's left
+- Add content: experiments, journal entries, learnings (do via live site forms)
+- Custom domain (optional)
 
 Update this section at the end of every session with what was completed
 and what comes next.
