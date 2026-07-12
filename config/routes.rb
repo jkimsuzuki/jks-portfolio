@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   get "about", to: "pages#about"
   get "systems", to: "pages#systems"
   get "experiments", to: "pages#experiments"
+  resources :experiments, only: [:create, :destroy]
   get "journal", to: "pages#journal"
   resources :journal_entries, only: [:create, :destroy]
   get "learnings", to: "pages#learnings"

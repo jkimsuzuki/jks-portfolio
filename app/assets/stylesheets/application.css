@@ -204,6 +204,26 @@ nav {
   color: var(--c-support);
 }
 
+.tag-in-progress {
+  border-color: var(--c-in-progress);
+  color: var(--c-in-progress);
+}
+
+.tag-on-hold {
+  border-color: var(--fg-dim);
+  color: var(--fg-dim);
+}
+
+.exp-thumb-in-progress {
+  background-color: #2a2a10;
+  border: 1px solid var(--c-in-progress);
+}
+
+.exp-thumb-on-hold {
+  background-color: #1a1a1a;
+  border: 1px solid var(--fg-dim);
+}
+
 .active-experiments-item-title {
   flex: 2; 
 }

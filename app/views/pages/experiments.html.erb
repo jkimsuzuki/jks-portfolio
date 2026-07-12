@@ -9,23 +9,23 @@
     <div class="experiments-stats panel">
       <div class="exp-stat">
         <p class="exp-stat-label">ACTIVE EXPERIMENTS</p>
-        <p class="exp-stat-value">1</p>
+        <p class="exp-stat-value"><%= @experiments.where(status: "IN PROGRESS").count %></p>
         <p class="exp-stat-sub">In progress</p>
       </div>
       <div class="exp-stat">
         <p class="exp-stat-label">COMPLETED</p>
-        <p class="exp-stat-value">1</p>
+        <p class="exp-stat-value"><%= @experiments.where(status: "COMPLETE").count %></p>
         <p class="exp-stat-sub">Shipped</p>
       </div>
       <div class="exp-stat">
         <p class="exp-stat-label">IDEAS BACKLOG</p>
-        <p class="exp-stat-value">3</p>
+        <p class="exp-stat-value"><%= @experiments.where(status: "IDEA").count %></p>
         <p class="exp-stat-sub">Planned</p>
       </div>
       <div class="exp-stat">
-        <p class="exp-stat-label">SUCCESS RATE</p>
-        <p class="exp-stat-value">100%</p>
-        <p class="exp-stat-sub">Completed</p>
+        <p class="exp-stat-label">TOTAL</p>
+        <p class="exp-stat-value"><%= @experiments.count %></p>
+        <p class="exp-stat-sub">All time</p>
       </div>
     </div>
   </div>
@@ -40,7 +40,6 @@
     </div>
     <div class="experiments-search">
       <input type="text" class="search-input" placeholder="Search experiments...">
-      <span class="filter-btn">⧉ FILTERS</span>
     </div>
   </div>
 
@@ -48,87 +47,44 @@
 
     <div class="experiments-list-col">
 
-      <div class="exp-item">
-        <span class="exp-num">(01)</span>
-        <div class="exp-thumbnail exp-thumb-complete"></div>
-        <div class="exp-details">
-          <div class="exp-title-row">
-            <p class="exp-name">SignalDesk</p>
-            <span class="tag tag-complete">COMPLETE</span>
-          </div>
-          <p class="exp-desc">Rails 8 incident-tracking and observability platform with Prometheus, Grafana, and Slack alerting. Live on Koyeb.</p>
+      <%= form_with model: @new_experiment, url: experiments_path, class: "new-entry-form panel" do |f| %>
+        <p class="section-title">// NEW EXPERIMENT</p>
+        <div class="new-entry-fields">
+          <%= f.text_field :name, placeholder: "Experiment name", class: "entry-input" %>
+          <%= f.select :status, ["IN PROGRESS", "COMPLETE", "IDEA", "ON HOLD"], {}, class: "entry-input entry-select" %>
+          <%= f.date_field :experiment_date, class: "entry-input", value: Date.today %>
         </div>
-        <div class="exp-meta">
-          <p class="exp-meta-label">COMPLETED</p>
-          <p class="exp-meta-date">2025</p>
-        </div>
-      </div>
+        <%= f.text_area :description, placeholder: "What is this experiment about?", class: "entry-input entry-textarea" %>
+        <%= f.text_field :url, placeholder: "URL (optional — GitHub, live link)", class: "entry-input" %>
+        <%= f.submit "+ Add Experiment", class: "entry-submit" %>
+      <% end %>
 
-      <div class="exp-item">
-        <span class="exp-num">(02)</span>
-        <div class="exp-thumbnail exp-thumb-progress"></div>
-        <div class="exp-details">
-          <div class="exp-title-row">
-            <p class="exp-name">jks-os Portfolio</p>
-            <span class="tag tag-in-progress">IN PROGRESS</span>
+      <% if @experiments.any? %>
+        <% @experiments.each_with_index do |experiment, index| %>
+          <div class="exp-item">
+            <span class="exp-num">(<%= "%02d" % (index + 1) %>)</span>
+            <div class="exp-thumbnail exp-thumb-<%= experiment.status.downcase.gsub(' ', '-') %>"></div>
+            <div class="exp-details">
+              <div class="exp-title-row">
+                <% if experiment.url.present? %>
+                  <a href="<%= experiment.url %>" target="_blank" class="exp-name"><%= experiment.name %></a>
+                <% else %>
+                  <p class="exp-name"><%= experiment.name %></p>
+                <% end %>
+                <span class="tag tag-<%= experiment.status.downcase.gsub(' ', '-') %>"><%= experiment.status %></span>
+              </div>
+              <p class="exp-desc"><%= experiment.description %></p>
+            </div>
+            <div class="exp-meta">
+              <p class="exp-meta-label"><%= experiment.status == "COMPLETE" ? "COMPLETED" : "UPDATED" %></p>
+              <p class="exp-meta-date"><%= experiment.experiment_date&.strftime("%b %Y") %></p>
+            </div>
+            <%= button_to "×", experiment_path(experiment), method: :delete, class: "entry-delete", data: { turbo_confirm: "Delete this experiment?" } %>
           </div>
-          <p class="exp-desc">Personal operating system styled as a dark terminal. Built with Rails 8, plain CSS, deployed to Koyeb.</p>
-        </div>
-        <div class="exp-meta">
-          <p class="exp-meta-label">UPDATED</p>
-          <p class="exp-meta-date">Jul 2026</p>
-        </div>
-      </div>
-
-      <div class="exp-item">
-        <span class="exp-num">(03)</span>
-        <div class="exp-thumbnail exp-thumb-idea"></div>
-        <div class="exp-details">
-          <div class="exp-title-row">
-            <p class="exp-name">Log Parser CLI</p>
-            <span class="tag tag-idea">IDEA</span>
-          </div>
-          <p class="exp-desc">CLI tool to parse and analyse system logs faster. Useful for RIR-level incident investigation.</p>
-        </div>
-        <div class="exp-meta">
-          <p class="exp-meta-label">ADDED</p>
-          <p class="exp-meta-date">Jul 2026</p>
-        </div>
-      </div>
-
-      <div class="exp-item">
-        <span class="exp-num">(04)</span>
-        <div class="exp-thumbnail exp-thumb-idea"></div>
-        <div class="exp-details">
-          <div class="exp-title-row">
-            <p class="exp-name">Shopify RIR Learning Path</p>
-            <span class="tag tag-idea">IDEA</span>
-          </div>
-          <p class="exp-desc">Structured study path covering Shopify's platform, incident response practices, and observability tooling.</p>
-        </div>
-        <div class="exp-meta">
-          <p class="exp-meta-label">ADDED</p>
-          <p class="exp-meta-date">Jul 2026</p>
-        </div>
-      </div>
-
-      <div class="exp-item">
-        <span class="exp-num">(05)</span>
-        <div class="exp-thumbnail exp-thumb-idea"></div>
-        <div class="exp-details">
-          <div class="exp-title-row">
-            <p class="exp-name">Cases Tracker App</p>
-            <span class="tag tag-idea">IDEA</span>
-          </div>
-          <p class="exp-desc">Structured documentation system for real customer support incidents, patterns, and resolutions.</p>
-        </div>
-        <div class="exp-meta">
-          <p class="exp-meta-label">ADDED</p>
-          <p class="exp-meta-date">Jul 2026</p>
-        </div>
-      </div>
-
-      <a href="#" class="view-all-link">> view all experiments</a>
+        <% end %>
+      <% else %>
+        <p class="journal-empty">No experiments yet. Add your first one above.</p>
+      <% end %>
 
       <div class="tip-bar">
         <span class="tip-star">✳</span>
@@ -145,10 +101,20 @@
 
       <div class="exp-summary panel">
         <p class="section-title">EXPERIMENT SUMMARY</p>
+        <% total = @experiments.count.to_f %>
+        <% in_progress = @experiments.where(status: "IN PROGRESS").count %>
+        <% complete = @experiments.where(status: "COMPLETE").count %>
+        <% idea = @experiments.where(status: "IDEA").count %>
+        <% on_hold = @experiments.where(status: "ON HOLD").count %>
         <div class="donut-wrap">
-          <div class="donut-chart">
+          <div class="donut-chart" style="background: conic-gradient(
+            var(--c-in-progress) 0% <%= total > 0 ? (in_progress / total * 100).round : 0 %>%,
+            var(--c-support) <%= total > 0 ? (in_progress / total * 100).round : 0 %>% <%= total > 0 ? ((in_progress + complete) / total * 100).round : 0 %>%,
+            var(--c-idea) <%= total > 0 ? ((in_progress + complete) / total * 100).round : 0 %>% <%= total > 0 ? ((in_progress + complete + idea) / total * 100).round : 0 %>%,
+            var(--fg-dim) <%= total > 0 ? ((in_progress + complete + idea) / total * 100).round : 0 %>% 100%
+          );">
             <div class="donut-hole">
-              <p class="donut-total">5</p>
+              <p class="donut-total"><%= @experiments.count %></p>
               <p class="donut-label">Total</p>
             </div>
           </div>
@@ -156,22 +122,22 @@
             <div class="legend-item">
               <span class="legend-dot legend-progress"></span>
               <span class="legend-name">In Progress</span>
-              <span class="legend-count">1 (20%)</span>
+              <span class="legend-count"><%= in_progress %></span>
             </div>
             <div class="legend-item">
               <span class="legend-dot legend-complete"></span>
               <span class="legend-name">Complete</span>
-              <span class="legend-count">1 (20%)</span>
+              <span class="legend-count"><%= complete %></span>
             </div>
             <div class="legend-item">
               <span class="legend-dot legend-idea"></span>
               <span class="legend-name">Idea</span>
-              <span class="legend-count">3 (60%)</span>
+              <span class="legend-count"><%= idea %></span>
             </div>
             <div class="legend-item">
               <span class="legend-dot legend-hold"></span>
               <span class="legend-name">On Hold</span>
-              <span class="legend-count">0 (0%)</span>
+              <span class="legend-count"><%= on_hold %></span>
             </div>
           </div>
         </div>
@@ -179,35 +145,19 @@
 
       <div class="exp-activity panel">
         <p class="section-title">RECENT ACTIVITY</p>
-        <div class="activity-item">
-          <span class="activity-date">Jul 2026</span>
-          <span class="activity-text">Started: jks-os Portfolio</span>
-        </div>
-        <div class="activity-item">
-          <span class="activity-date">Jun 2026</span>
-          <span class="activity-text">Deployed: SignalDesk to Koyeb</span>
-        </div>
-        <div class="activity-item">
-          <span class="activity-date">Jun 2026</span>
-          <span class="activity-text">Added: Grafana dashboard</span>
-        </div>
-        <div class="activity-item">
-          <span class="activity-date">May 2026</span>
-          <span class="activity-text">Completed: SignalDesk MVP</span>
-        </div>
-        <div class="activity-item">
-          <span class="activity-date">Apr 2026</span>
-          <span class="activity-text">Added: Prometheus metrics</span>
-        </div>
-        <a href="#" class="view-all-link">> view full activity log</a>
+        <% @experiments.first(5).each do |experiment| %>
+          <div class="activity-item">
+            <span class="activity-date"><%= experiment.experiment_date&.strftime("%b %Y") %></span>
+            <span class="activity-text"><%= experiment.status == "COMPLETE" ? "Completed" : "Updated" %>: <%= experiment.name %></span>
+          </div>
+        <% end %>
+        <% if @experiments.empty? %>
+          <p class="journal-empty">No activity yet.</p>
+        <% end %>
       </div>
 
       <div class="exp-quick-actions panel">
         <p class="section-title">QUICK ACTIONS</p>
-        <a href="https://github.com/new" target="_blank" class="quick-action-item">
-          <span class="quick-action-icon">+</span>
-          <span>New Experiment</span>
-        </a>
         <a href="https://innocent-elinore-josephkim-suzuki-1e11ded2.koyeb.app/" target="_blank" class="quick-action-item">
           <span class="quick-action-icon">▶</span>
           <span>View SignalDesk</span>
@@ -219,10 +169,6 @@
         <a href="/journal" class="quick-action-item">
           <span class="quick-action-icon">◉</span>
           <span>View Journal</span>
-        </a>
-        <a href="/cases" class="quick-action-item">
-          <span class="quick-action-icon">△</span>
-          <span>View Cases</span>
         </a>
       </div>
 
