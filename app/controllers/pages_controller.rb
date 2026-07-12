@@ -7,4 +7,7 @@ class PagesController < ApplicationController
 
   def systems
   end
+
+  def experiments
+  end
 end

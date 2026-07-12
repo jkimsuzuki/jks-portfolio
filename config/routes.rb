@@ -14,4 +14,5 @@ Rails.application.routes.draw do
   root "pages#overview"
   get "about", to: "pages#about"
   get "systems", to: "pages#systems"
+  get "experiments", to: "pages#experiments"
 end
