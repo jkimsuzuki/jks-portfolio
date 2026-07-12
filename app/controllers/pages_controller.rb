@@ -10,4 +10,7 @@ class PagesController < ApplicationController
 
   def experiments
   end
+
+  def journal
+  end
 end

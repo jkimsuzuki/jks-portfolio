@@ -15,4 +15,5 @@ Rails.application.routes.draw do
   get "about", to: "pages#about"
   get "systems", to: "pages#systems"
   get "experiments", to: "pages#experiments"
+  get "journal", to: "pages#journal"
 end
