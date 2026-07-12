@@ -130,7 +130,7 @@ Day 10 — Cases → real model                                   [84%]
 Day 11 — Experiments → real model                             [89%]
 Day 12 — Learnings → real model                               [93%]
 Day 13 — Polish pass                                          [97%]
-Day 14 — Deploy + domain + message KB                        [100%]
+Day 14 — Deploy + domain                                     [100%]
 ```
 
 ---
