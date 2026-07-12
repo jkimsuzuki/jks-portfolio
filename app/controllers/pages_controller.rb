@@ -12,6 +12,8 @@ class PagesController < ApplicationController
   end
 
   def journal
+    @entries = JournalEntry.order(entry_date: :desc, created_at: :desc)
+    @new_entry = JournalEntry.new
   end
 
   def learnings

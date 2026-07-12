@@ -9,12 +9,12 @@
     <div class="journal-stats panel">
       <div class="journal-stat">
         <p class="journal-stat-label">TOTAL ENTRIES</p>
-        <p class="journal-stat-value">—</p>
+        <p class="journal-stat-value"><%= @entries.count %></p>
         <p class="journal-stat-sub">All time</p>
       </div>
       <div class="journal-stat">
         <p class="journal-stat-label">THIS MONTH</p>
-        <p class="journal-stat-value">—</p>
+        <p class="journal-stat-value"><%= @entries.where(entry_date: Date.current.beginning_of_month..Date.current.end_of_month).count %></p>
         <p class="journal-stat-sub">Entries</p>
       </div>
     </div>
@@ -38,77 +38,50 @@
 
     <div class="journal-list-col">
 
-      <p class="journal-date-group">TODAY</p>
-
-      <div class="journal-entry">
-        <div class="journal-entry-icon entry-icon-lesson">L</div>
-        <div class="journal-entry-body">
-          <div class="journal-entry-header">
-            <p class="journal-entry-title">Entry title — fill in later</p>
-            <span class="tag tag-lesson">LESSON</span>
-            <span class="journal-entry-date">—</span>
-          </div>
-          <p class="journal-entry-desc">Entry content coming soon.</p>
-          <div class="journal-entry-tags">
-            <span class="journal-tag">tag</span>
-          </div>
+      <%= form_with model: @new_entry, url: journal_entries_path, class: "new-entry-form panel" do |f| %>
+        <p class="section-title">// NEW ENTRY</p>
+        <div class="new-entry-fields">
+          <%= f.text_field :title, placeholder: "Entry title", class: "entry-input" %>
+          <%= f.select :entry_type, %w[REFLECTION IDEA PLAN LESSON NOTE], {}, class: "entry-input entry-select" %>
+          <%= f.text_field :tags, placeholder: "Tags (comma separated)", class: "entry-input" %>
+          <%= f.date_field :entry_date, class: "entry-input", value: Date.today %>
         </div>
-      </div>
+        <%= f.text_area :body, placeholder: "Write your entry here...", class: "entry-input entry-textarea" %>
+        <%= f.submit "+ Add Entry", class: "entry-submit" %>
+      <% end %>
 
-      <div class="journal-entry">
-        <div class="journal-entry-icon entry-icon-idea">I</div>
-        <div class="journal-entry-body">
-          <div class="journal-entry-header">
-            <p class="journal-entry-title">Entry title — fill in later</p>
-            <span class="tag tag-idea">IDEA</span>
-            <span class="journal-entry-date">—</span>
-          </div>
-          <p class="journal-entry-desc">Entry content coming soon.</p>
-          <div class="journal-entry-tags">
-            <span class="journal-tag">tag</span>
-          </div>
-        </div>
-      </div>
-
-      <p class="journal-date-group">YESTERDAY</p>
-
-      <div class="journal-entry">
-        <div class="journal-entry-icon entry-icon-reflection">R</div>
-        <div class="journal-entry-body">
-          <div class="journal-entry-header">
-            <p class="journal-entry-title">Entry title — fill in later</p>
-            <span class="tag tag-reflection">REFLECTION</span>
-            <span class="journal-entry-date">—</span>
-          </div>
-          <p class="journal-entry-desc">Entry content coming soon.</p>
-          <div class="journal-entry-tags">
-            <span class="journal-tag">tag</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="journal-entry">
-        <div class="journal-entry-icon entry-icon-plan">P</div>
-        <div class="journal-entry-body">
-          <div class="journal-entry-header">
-            <p class="journal-entry-title">Entry title — fill in later</p>
-            <span class="tag tag-plan">PLAN</span>
-            <span class="journal-entry-date">—</span>
-          </div>
-          <p class="journal-entry-desc">Entry content coming soon.</p>
-          <div class="journal-entry-tags">
-            <span class="journal-tag">tag</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="journal-pagination">
-        <span class="pagination-prev">‹</span>
-        <span class="pagination-page active-page">1</span>
-        <span class="pagination-page">2</span>
-        <span class="pagination-page">3</span>
-        <span class="pagination-next">›</span>
-      </div>
+      <% if @entries.any? %>
+        <% @entries.group_by { |e| e.entry_date }.each do |date, entries| %>
+          <p class="journal-date-group"><%= date&.strftime("%B %d, %Y") || "No date" %></p>
+          <% entries.each do |entry| %>
+            <div class="journal-entry">
+              <div class="journal-entry-icon entry-icon-<%= entry.entry_type.downcase %>">
+                <%= entry.entry_type.first %>
+              </div>
+              <div class="journal-entry-body">
+                <div class="journal-entry-header">
+                  <p class="journal-entry-title"><%= entry.title %></p>
+                  <span class="tag tag-<%= entry.entry_type.downcase %>"><%= entry.entry_type %></span>
+                  <span class="journal-entry-date"><%= entry.entry_date&.strftime("%b %d, %Y") %></span>
+                </div>
+                <% if entry.body.present? %>
+                  <p class="journal-entry-desc"><%= entry.body %></p>
+                <% end %>
+                <% if entry.tag_list.any? %>
+                  <div class="journal-entry-tags">
+                    <% entry.tag_list.each do |tag| %>
+                      <span class="journal-tag"><%= tag %></span>
+                    <% end %>
+                  </div>
+                <% end %>
+              </div>
+              <%= button_to "×", journal_entry_path(entry), method: :delete, class: "entry-delete", data: { turbo_confirm: "Delete this entry?" } %>
+            </div>
+          <% end %>
+        <% end %>
+      <% else %>
+        <p class="journal-empty">No entries yet. Add your first one above.</p>
+      <% end %>
 
     </div>
 
@@ -119,10 +92,14 @@
           <p class="section-title">CALENDAR VIEW</p>
           <div class="calendar-nav">
             <span class="cal-nav">‹</span>
-            <span class="cal-month">July 2026</span>
+            <span class="cal-month"><%= Date.today.strftime("%B %Y") %></span>
             <span class="cal-nav">›</span>
           </div>
         </div>
+        <% entry_dates = @entries.pluck(:entry_date).compact.map(&:to_date) %>
+        <% today = Date.today %>
+        <% first_day = today.beginning_of_month %>
+        <% last_day = today.end_of_month %>
         <table class="calendar-table">
           <thead>
             <tr>
@@ -130,21 +107,23 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td></td><td></td><td></td><td class="cal-day">1</td><td class="cal-day">2</td><td class="cal-day">3</td><td class="cal-day">4</td>
-            </tr>
-            <tr>
-              <td class="cal-day">5</td><td class="cal-day">6</td><td class="cal-day">7</td><td class="cal-day">8</td><td class="cal-day">9</td><td class="cal-day">10</td><td class="cal-day">11</td>
-            </tr>
-            <tr>
-              <td class="cal-day cal-today cal-has-entry">12</td><td class="cal-day">13</td><td class="cal-day">14</td><td class="cal-day">15</td><td class="cal-day">16</td><td class="cal-day">17</td><td class="cal-day">18</td>
-            </tr>
-            <tr>
-              <td class="cal-day">19</td><td class="cal-day">20</td><td class="cal-day">21</td><td class="cal-day">22</td><td class="cal-day">23</td><td class="cal-day">24</td><td class="cal-day">25</td>
-            </tr>
-            <tr>
-              <td class="cal-day">26</td><td class="cal-day">27</td><td class="cal-day">28</td><td class="cal-day">29</td><td class="cal-day">30</td><td class="cal-day">31</td><td></td>
-            </tr>
+            <% week_start = first_day.beginning_of_week(:sunday) %>
+            <% while week_start <= last_day %>
+              <tr>
+                <% 7.times do |i| %>
+                  <% day = week_start + i %>
+                  <% if day.month == today.month %>
+                    <% classes = ["cal-day"] %>
+                    <% classes << "cal-today" if day == today %>
+                    <% classes << "cal-has-entry" if entry_dates.include?(day) %>
+                    <td class="<%= classes.join(' ') %>"><%= day.day %></td>
+                  <% else %>
+                    <td></td>
+                  <% end %>
+                <% end %>
+              </tr>
+              <% week_start += 7 %>
+            <% end %>
           </tbody>
         </table>
       </div>
@@ -152,14 +131,14 @@
       <div class="journal-recent-tags panel">
         <p class="section-title">RECENTLY USED TAGS</p>
         <div class="recent-tags-list">
-          <span class="journal-tag">observability</span>
-          <span class="journal-tag">rails</span>
-          <span class="journal-tag">incident-response</span>
-          <span class="journal-tag">learning</span>
-          <span class="journal-tag">webhooks</span>
-          <span class="journal-tag">production</span>
-          <span class="journal-tag">reliability</span>
-          <span class="journal-tag">shopify</span>
+          <% all_tags = @entries.flat_map(&:tag_list).tally.sort_by { |_, count| -count }.first(12) %>
+          <% if all_tags.any? %>
+            <% all_tags.each do |tag, _| %>
+              <span class="journal-tag"><%= tag %></span>
+            <% end %>
+          <% else %>
+            <span class="journal-tag-empty">No tags yet</span>
+          <% end %>
         </div>
       </div>
 

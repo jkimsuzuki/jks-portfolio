@@ -16,5 +16,6 @@ Rails.application.routes.draw do
   get "systems", to: "pages#systems"
   get "experiments", to: "pages#experiments"
   get "journal", to: "pages#journal"
+  resources :journal_entries, only: [:create, :destroy]
   get "learnings", to: "pages#learnings"
 end
