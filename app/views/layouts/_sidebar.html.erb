@@ -3,12 +3,12 @@
     <a href="/"><%= image_tag "jks-signature-logo.svg", alt: "Jks Portfolio Logo", class: "logo" %></a>
   </div>
   <ul>
-    <li><a href="/" class="active"><span class="chevron">></span> overview.exe</a></li>
-    <li><a href="/systems"><span class="chevron">></span> systems.exe</a></li>
-    <li><a href="/experiments"><span class="chevron">></span> experiments.exe</a></li>
-    <li><a href="/journal"><span class="chevron">></span> journal.exe</a></li>
-    <li><a href="/learnings"><span class="chevron">></span> learnings.exe</a></li>
-    <li><a href="/about"><span class="chevron">></span> about.exe</a></li>
+    <li><a href="/" class="<%= 'active' if current_page?(root_path) %>"><span class="chevron">></span> overview.exe</a></li>
+    <li><a href="/systems" class="<%= 'active' if current_page?(systems_path) %>"><span class="chevron">></span> systems.exe</a></li>
+    <li><a href="/experiments" class="<%= 'active' if current_page?(experiments_path) %>"><span class="chevron">></span> experiments.exe</a></li>
+    <li><a href="/journal" class="<%= 'active' if current_page?(journal_path) %>"><span class="chevron">></span> journal.exe</a></li>
+    <li><a href="/learnings" class="<%= 'active' if current_page?(learnings_path) %>"><span class="chevron">></span> learnings.exe</a></li>
+    <li><a href="/about" class="<%= 'active' if current_page?(about_path) %>"><span class="chevron">></span> about.exe</a></li>
   </ul>
   <div class="cursor">
    > _

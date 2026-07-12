@@ -1,45 +1,47 @@
 <div class="overview">
   <div class="overview-row">
-    <!-- Hero Panel -->
-    <div class="hero-panel panel">
-      <h2>Build reliable systems. <br>
-        Solve meaningful problems.</h2>
-    </div>
-    
     <!-- Journey Snapshot -->
     <div class="journey-panel panel">
       <p class="section-title">JOURNEY SNAPSHOT</p>
       <ul class="journey-timeline">
         <li class="journey-timeline-item">
           <p class="journey-timeline-item-title">Vancouver, Canada</p>
+          <span class="timeline-node"></span>
           <p class="journey-timeline-item-subtitle">Early Years</p>
         </li>
         <li class="journey-timeline-item">
-          <p class="journey-timeline-item-title">London, UK</p>
+          <p class="journey-timeline-item-title">London,<br>UK</p>
+          <span class="timeline-node"></span>
           <p class="journey-timeline-item-subtitle">Historical Costumes & Musicals</p>
         </li>
         <li class="journey-timeline-item">
-          <p class="journey-timeline-item-title">Interpreter/Translator</p>
+          <p class="journey-timeline-item-title">Interpreter/<br>Translator</p>
+          <span class="timeline-node"></span>
           <p class="journey-timeline-item-subtitle">Bridging Communication</p>
         </li>
         <li class="journey-timeline-item">
           <p class="journey-timeline-item-title">Personal Trainer/Educator</p>
+          <span class="timeline-node"></span>
           <p class="journey-timeline-item-subtitle">Leading & Empowering People</p>
         </li>
         <li class="journey-timeline-item">
           <p class="journey-timeline-item-title">Flower Shop Owner & Creative Director</p>
-          <p class="journey-timeline-item-subtitle">Building & Creating a Business in Local Community</p>
+          <span class="timeline-node"></span>
+          <p class="journey-timeline-item-subtitle">Building & Creating a Business</p>
         </li>
         <li class="journey-timeline-item">
-          <p class="journey-timeline-item-title">IT Customer Support/Technical Troubleshooting</p>
-          <p class="journey-timeline-item-subtitle">Solving Problems & Providing Solutions</p>
+          <p class="journey-timeline-item-title">IT Customer Support</p>
+          <span class="timeline-node"></span>
+          <p class="journey-timeline-item-subtitle">Solving Problems Daily</p>
         </li>
         <li class="journey-timeline-item">
           <p class="journey-timeline-item-title">Self-Taught Rails Developer</p>
+          <span class="timeline-node"></span>
           <p class="journey-timeline-item-subtitle">Building Solutions</p>
         </li>
         <li class="journey-timeline-item">
           <p class="journey-timeline-item-title">Future: Shopify RIR Engineer</p>
+          <span class="timeline-node timeline-node-final"></span>
           <p class="journey-timeline-item-subtitle">The Next Chapter</p>
         </li>
       </ul>
@@ -50,7 +52,7 @@
   <div class="overview-row stat-bar panel">
     <div class="stat-tile-item">
       <p class="stat-tile-item-title">PROJECTS</p>
-      <p class="stat-tile-item-value">2</p>
+      <p class="stat-tile-item-value"><%= @project_count %></p>
     </div>
     <div class="stat-tile-item">
       <p class="stat-tile-item-title">INCIDENTS</p>
@@ -71,16 +73,20 @@
     <div class="active-experiments panel">
       <p class="section-title">ACTIVE EXPERIMENTS</p>
       <ol class="active-experiments-list">
-        <li class="active-experiments-item">
-          <span class="active-experiments-item-title">Troubleshooting Journal SignalDesk</span>
-          <span class="tag tag-in-progress">IN PROGRESS</span>
-          <span class="active-experiments-item-subtitle">Journal app specifically created to log, analyze and keep track of troubleshooting issues when building out Programming Projects and Shopify Interview. </span>
-        </li>
-        <li class="active-experiments-item">
-          <span class="active-experiments-item-title">Shopify Storefront</span>
-          <span class="tag tag-idea">IDEA</span>
-          <span class="active-experiments-item-subtitle"> Learning theme architecture: layouts, sections, snippets, and the rendering pipeline of the platform behind the role.</span>
-        </li>
+        <% if @experiments.any? %>
+          <% @experiments.each do |experiment| %>
+            <li class="active-experiments-item">
+              <span class="active-experiments-item-title"><%= experiment.name %></span>
+              <span class="tag tag-in-progress">IN PROGRESS</span>
+              <span class="active-experiments-item-subtitle"><%= experiment.description %></span>
+            </li>
+          <% end %>
+        <% else %>
+          <li class="active-experiments-item">
+            <span class="active-experiments-item-title">No active experiments</span>
+            <span class="active-experiments-item-subtitle">Add one in experiments.exe</span>
+          </li>
+        <% end %>
       </ol>
       <a class="view-all-link" href="/experiments">> view all experiments.log</a>
     </div>

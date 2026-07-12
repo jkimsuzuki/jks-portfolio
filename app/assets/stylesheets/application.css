@@ -136,24 +136,67 @@ nav {
 }
 
   /* hero section */
-.hero-panel {
-  flex: 1;
-}
   /* journey section */
 .journey-panel {
-  flex: 2;
+  flex: 1;
 }
 
 .journey-timeline {
   display: flex;
-  font-size: 10px;
+  font-size: 13px;
   list-style: none;
   text-align: center;
-  gap: 25px;
+  gap: 0;
+  margin-top: 0;
+  position: relative;
 }
 
-.journey-timeline-item-title{
-  margin-bottom: 30px;
+.journey-timeline::before {
+  content: '';
+  position: absolute;
+  top: 66px;
+  left: 0;
+  right: 0;
+  border-top: 1px dashed var(--fg-dim);
+  z-index: 0;
+}
+
+.journey-timeline-item {
+  flex: 1;
+  padding: 0 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.journey-timeline-item-title {
+  height: 56px;
+  overflow: hidden;
+  color: var(--fg);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.timeline-node {
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--fg-dim);
+  margin: 6px auto;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.timeline-node-final {
+  background: var(--lime);
+  box-shadow: 0 0 5px var(--lime);
+}
+
+.journey-timeline-item-subtitle {
+  color: var(--fg-dim);
 }
   /* stats section */
 .stat-tile-item {
@@ -224,8 +267,12 @@ nav {
   border: 1px solid var(--fg-dim);
 }
 
+.active-experiments {
+  flex: 1;
+}
+
 .active-experiments-item-title {
-  flex: 2; 
+  flex: 2;
 }
 
 .active-experiments-list {
@@ -522,6 +569,11 @@ nav {
   margin-bottom: 12px;
 }
 
+.system-icon img {
+  width: 24px;
+  height: 24px;
+}
+
 .system-card-name {
   font-size: 11px;
   color: var(--fg);
@@ -577,6 +629,11 @@ nav {
   font-size: 10px;
   color: var(--lime);
   flex-shrink: 0;
+}
+
+.systems-list-icon img {
+  width: 20px;
+  height: 20px;
 }
 
 .systems-list-name {

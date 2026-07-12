@@ -9,23 +9,23 @@
     <div class="learnings-stats panel">
       <div class="learning-stat">
         <p class="learning-stat-label">TOTAL RESOURCES</p>
-        <p class="learning-stat-value">—</p>
+        <p class="learning-stat-value"><%= @learnings.count %></p>
         <p class="learning-stat-sub">Curated</p>
       </div>
       <div class="learning-stat">
         <p class="learning-stat-label">COMPLETED</p>
-        <p class="learning-stat-value">—</p>
-        <p class="learning-stat-sub">—% complete</p>
+        <p class="learning-stat-value"><%= @learnings.where(progress: 100).count %></p>
+        <p class="learning-stat-sub"><%= @learnings.count > 0 ? "#{(@learnings.where(progress: 100).count.to_f / @learnings.count * 100).round}% complete" : "0% complete" %></p>
       </div>
       <div class="learning-stat">
-        <p class="learning-stat-label">HOURS LEARNED</p>
-        <p class="learning-stat-value">—</p>
-        <p class="learning-stat-sub">All time</p>
+        <p class="learning-stat-label">IN PROGRESS</p>
+        <p class="learning-stat-value"><%= @learnings.where.not(progress: 100).count %></p>
+        <p class="learning-stat-sub">Active</p>
       </div>
       <div class="learning-stat">
-        <p class="learning-stat-label">CURRENT STREAK</p>
-        <p class="learning-stat-value">—</p>
-        <p class="learning-stat-sub">Days</p>
+        <p class="learning-stat-label">TOPICS</p>
+        <p class="learning-stat-value"><%= @learnings.pluck(:topic).compact.uniq.count %></p>
+        <p class="learning-stat-sub">Areas</p>
       </div>
     </div>
   </div>
@@ -50,136 +50,58 @@
 
     <div class="learnings-list-col">
 
-      <div class="learning-item">
-        <span class="learning-num">(01)</span>
-        <div class="learning-icon learning-icon-course">OP</div>
-        <div class="learning-details">
-          <div class="learning-title-row">
-            <p class="learning-name">The Odin Project</p>
-            <span class="tag tag-course">COURSE</span>
-            <span class="tag tag-topic">FULL STACK</span>
-          </div>
-          <p class="learning-desc">Full-stack web development curriculum covering Ruby, Rails, HTML, CSS, and JavaScript.</p>
-          <div class="learning-progress-bar">
-            <div class="learning-progress-fill" style="width: 65%"></div>
-          </div>
+      <%= form_with model: @new_learning, url: learnings_path, class: "new-entry-form panel" do |f| %>
+        <p class="section-title">// NEW RESOURCE</p>
+        <div class="new-entry-fields">
+          <%= f.text_field :name, placeholder: "Resource name", class: "entry-input" %>
+          <%= f.select :resource_type, %w[COURSE DOCUMENTATION VIDEO ARTICLE BOOK NOTE], {}, class: "entry-input entry-select" %>
+          <%= f.text_field :topic, placeholder: "Topic (e.g. RAILS, SHOPIFY)", class: "entry-input" %>
+          <%= f.number_field :progress, placeholder: "Progress (0-100)", min: 0, max: 100, class: "entry-input entry-select" %>
         </div>
-        <div class="learning-meta">
-          <p class="learning-meta-pct">65%</p>
-          <p class="learning-meta-sub">In progress</p>
-        </div>
-      </div>
+        <%= f.text_area :description, placeholder: "What is this resource about?", class: "entry-input entry-textarea" %>
+        <%= f.text_field :url, placeholder: "URL (optional)", class: "entry-input" %>
+        <%= f.submit "+ Add Resource", class: "entry-submit" %>
+      <% end %>
 
-      <div class="learning-item">
-        <span class="learning-num">(02)</span>
-        <div class="learning-icon learning-icon-course">FC</div>
-        <div class="learning-details">
-          <div class="learning-title-row">
-            <p class="learning-name">FreeCodeCamp</p>
-            <span class="tag tag-course">COURSE</span>
-            <span class="tag tag-topic">WEB DEV</span>
+      <% if @learnings.any? %>
+        <% @learnings.each_with_index do |learning, index| %>
+          <div class="learning-item">
+            <span class="learning-num">(<%= "%02d" % (index + 1) %>)</span>
+            <div class="learning-icon learning-icon-<%= learning.resource_type.downcase %>">
+              <%= learning.name.split.map(&:first).first(2).join.upcase %>
+            </div>
+            <div class="learning-details">
+              <div class="learning-title-row">
+                <% if learning.url.present? %>
+                  <a href="<%= learning.url %>" target="_blank" class="learning-name"><%= learning.name %></a>
+                <% else %>
+                  <p class="learning-name"><%= learning.name %></p>
+                <% end %>
+                <span class="tag tag-<%= learning.resource_type.downcase %>"><%= learning.resource_type %></span>
+                <% if learning.topic.present? %>
+                  <span class="tag tag-topic"><%= learning.topic %></span>
+                <% end %>
+              </div>
+              <% if learning.description.present? %>
+                <p class="learning-desc"><%= learning.description %></p>
+              <% end %>
+              <div class="learning-progress-bar">
+                <div class="learning-progress-fill <%= learning.complete? ? 'learning-progress-complete' : '' %>" style="width: <%= learning.progress || 0 %>%"></div>
+              </div>
+            </div>
+            <div class="learning-meta">
+              <p class="learning-meta-pct <%= learning.complete? ? 'learning-complete-pct' : '' %>"><%= learning.progress || 0 %>%</p>
+              <p class="learning-meta-sub"><%= learning.complete? ? "Complete" : "In progress" %></p>
+            </div>
+            <%= button_to "×", learning_path(learning), method: :delete, class: "entry-delete", data: { turbo_confirm: "Delete this resource?" } %>
           </div>
-          <p class="learning-desc">Hands-on web development certifications covering responsive design, algorithms, and data structures.</p>
-          <div class="learning-progress-bar">
-            <div class="learning-progress-fill" style="width: 80%"></div>
-          </div>
-        </div>
-        <div class="learning-meta">
-          <p class="learning-meta-pct">80%</p>
-          <p class="learning-meta-sub">In progress</p>
-        </div>
-      </div>
-
-      <div class="learning-item">
-        <span class="learning-num">(03)</span>
-        <div class="learning-icon learning-icon-documentation">RG</div>
-        <div class="learning-details">
-          <div class="learning-title-row">
-            <p class="learning-name">Rails Guides</p>
-            <span class="tag tag-documentation">DOCUMENTATION</span>
-            <span class="tag tag-topic">RAILS</span>
-          </div>
-          <p class="learning-desc">Official Ruby on Rails guides — the go-to reference for routing, models, views, and controllers.</p>
-          <div class="learning-progress-bar">
-            <div class="learning-progress-fill" style="width: 70%"></div>
-          </div>
-        </div>
-        <div class="learning-meta">
-          <p class="learning-meta-pct">70%</p>
-          <p class="learning-meta-sub">In progress</p>
-        </div>
-      </div>
-
-      <div class="learning-item">
-        <span class="learning-num">(04)</span>
-        <div class="learning-icon learning-icon-documentation">SH</div>
-        <div class="learning-details">
-          <div class="learning-title-row">
-            <p class="learning-name">Shopify Developer Docs</p>
-            <span class="tag tag-documentation">DOCUMENTATION</span>
-            <span class="tag tag-topic">SHOPIFY</span>
-          </div>
-          <p class="learning-desc">Official Shopify developer documentation covering APIs, themes, apps, and the ecosystem.</p>
-          <div class="learning-progress-bar">
-            <div class="learning-progress-fill" style="width: 20%"></div>
-          </div>
-        </div>
-        <div class="learning-meta">
-          <p class="learning-meta-pct">20%</p>
-          <p class="learning-meta-sub">In progress</p>
-        </div>
-      </div>
-
-      <div class="learning-item">
-        <span class="learning-num">(05)</span>
-        <div class="learning-icon learning-icon-course">GR</div>
-        <div class="learning-details">
-          <div class="learning-title-row">
-            <p class="learning-name">Grafana Fundamentals</p>
-            <span class="tag tag-course">COURSE</span>
-            <span class="tag tag-topic">OBSERVABILITY</span>
-          </div>
-          <p class="learning-desc">Learn to visualise, query, and build dashboards with Grafana. Applied in SignalDesk.</p>
-          <div class="learning-progress-bar">
-            <div class="learning-progress-fill" style="width: 60%"></div>
-          </div>
-        </div>
-        <div class="learning-meta">
-          <p class="learning-meta-pct">60%</p>
-          <p class="learning-meta-sub">In progress</p>
-        </div>
-      </div>
-
-      <div class="learning-item">
-        <span class="learning-num">(06)</span>
-        <div class="learning-icon learning-icon-book">PP</div>
-        <div class="learning-details">
-          <div class="learning-title-row">
-            <p class="learning-name">The Phoenix Project</p>
-            <span class="tag tag-book">BOOK</span>
-            <span class="tag tag-topic">DEVOPS</span>
-          </div>
-          <p class="learning-desc">A novel about IT, DevOps, and helping your business win. Essential reading for RIR engineers.</p>
-          <div class="learning-progress-bar">
-            <div class="learning-progress-fill learning-progress-complete" style="width: 100%"></div>
-          </div>
-        </div>
-        <div class="learning-meta">
-          <p class="learning-meta-pct learning-complete-pct">100%</p>
-          <p class="learning-meta-sub">Complete</p>
-        </div>
-      </div>
+        <% end %>
+      <% else %>
+        <p class="journal-empty">No resources yet. Add your first one above.</p>
+      <% end %>
 
       <div class="learning-footer">
         <a href="#" class="view-all-link">> view all learnings</a>
-        <div class="journal-pagination">
-          <span class="pagination-prev">‹</span>
-          <span class="pagination-page active-page">1</span>
-          <span class="pagination-page">2</span>
-          <span class="pagination-page">3</span>
-          <span class="pagination-page">4</span>
-          <span class="pagination-next">›</span>
-        </div>
       </div>
 
     </div>
@@ -193,65 +115,33 @@
           <span class="streak-encourage">Keep it up!</span>
         </div>
         <div class="streak-week">
-          <div class="streak-day-col">
-            <span class="streak-dot streak-active">✓</span>
-            <span class="streak-day-label">M</span>
-          </div>
-          <div class="streak-day-col">
-            <span class="streak-dot streak-active">✓</span>
-            <span class="streak-day-label">T</span>
-          </div>
-          <div class="streak-day-col">
-            <span class="streak-dot streak-active">✓</span>
-            <span class="streak-day-label">W</span>
-          </div>
-          <div class="streak-day-col">
-            <span class="streak-dot streak-active">✓</span>
-            <span class="streak-day-label">T</span>
-          </div>
-          <div class="streak-day-col">
-            <span class="streak-dot streak-active">✓</span>
-            <span class="streak-day-label">F</span>
-          </div>
-          <div class="streak-day-col">
-            <span class="streak-dot streak-today">·</span>
-            <span class="streak-day-label">S</span>
-          </div>
-          <div class="streak-day-col">
-            <span class="streak-dot streak-future"></span>
-            <span class="streak-day-label">S</span>
-          </div>
+          <% %w[M T W T F S S].each_with_index do |day, i| %>
+            <div class="streak-day-col">
+              <span class="streak-dot <%= i < 5 ? 'streak-active' : i == 5 ? 'streak-today' : 'streak-future' %>"><%= i < 5 ? '✓' : '' %></span>
+              <span class="streak-day-label"><%= day %></span>
+            </div>
+          <% end %>
         </div>
         <p class="streak-longest">Longest streak: — days</p>
       </div>
 
       <div class="top-categories panel">
         <p class="section-title">TOP CATEGORIES</p>
-        <div class="category-item">
-          <span class="category-name">Observability</span>
-          <div class="category-bar"><div class="category-fill" style="width: 85%"></div></div>
-          <span class="category-count">—</span>
-        </div>
-        <div class="category-item">
-          <span class="category-name">Shopify</span>
-          <div class="category-bar"><div class="category-fill" style="width: 65%"></div></div>
-          <span class="category-count">—</span>
-        </div>
-        <div class="category-item">
-          <span class="category-name">Rails</span>
-          <div class="category-bar"><div class="category-fill" style="width: 55%"></div></div>
-          <span class="category-count">—</span>
-        </div>
-        <div class="category-item">
-          <span class="category-name">DevOps</span>
-          <div class="category-bar"><div class="category-fill" style="width: 45%"></div></div>
-          <span class="category-count">—</span>
-        </div>
-        <div class="category-item">
-          <span class="category-name">Performance</span>
-          <div class="category-bar"><div class="category-fill" style="width: 35%"></div></div>
-          <span class="category-count">—</span>
-        </div>
+        <% topic_counts = @learnings.pluck(:topic).compact.tally.sort_by { |_, c| -c } %>
+        <% max_count = topic_counts.first&.last.to_f %>
+        <% if topic_counts.any? %>
+          <% topic_counts.first(5).each do |topic, count| %>
+            <div class="category-item">
+              <span class="category-name"><%= topic %></span>
+              <div class="category-bar">
+                <div class="category-fill" style="width: <%= max_count > 0 ? (count / max_count * 100).round : 0 %>%"></div>
+              </div>
+              <span class="category-count"><%= count %></span>
+            </div>
+          <% end %>
+        <% else %>
+          <p class="journal-empty">No topics yet.</p>
+        <% end %>
       </div>
 
     </div>
