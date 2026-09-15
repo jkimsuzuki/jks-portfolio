@@ -11,17 +11,17 @@ class PagesController < ApplicationController
   end
 
   def experiments
-    @experiments = Experiment.order(experiment_date: :desc, created_at: :desc)
+    @experiments = Experiment.order(experiment_date: :desc, created_at: :desc).to_a
     @new_experiment = Experiment.new
   end
 
   def journal
-    @entries = JournalEntry.order(entry_date: :desc, created_at: :desc)
+    @entries = JournalEntry.order(entry_date: :desc, created_at: :desc).to_a
     @new_entry = JournalEntry.new
   end
 
   def learnings
-    @learnings = Learning.order(started_on: :desc, created_at: :desc)
+    @learnings = Learning.order(started_on: :desc, created_at: :desc).to_a
     @new_learning = Learning.new
   end
 end

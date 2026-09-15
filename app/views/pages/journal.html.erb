@@ -9,12 +9,12 @@
     <div class="journal-stats panel">
       <div class="journal-stat">
         <p class="journal-stat-label">TOTAL ENTRIES</p>
-        <p class="journal-stat-value"><%= @entries.count %></p>
+        <p class="journal-stat-value"><%= @entries.size %></p>
         <p class="journal-stat-sub">All time</p>
       </div>
       <div class="journal-stat">
         <p class="journal-stat-label">THIS MONTH</p>
-        <p class="journal-stat-value"><%= @entries.where(entry_date: Date.current.beginning_of_month..Date.current.end_of_month).count %></p>
+        <p class="journal-stat-value"><%= @entries.count { |e| (Date.current.beginning_of_month..Date.current.end_of_month).cover?(e.entry_date) } %></p>
         <p class="journal-stat-sub">Entries</p>
       </div>
     </div>
@@ -96,7 +96,7 @@
             <span class="cal-nav">›</span>
           </div>
         </div>
-        <% entry_dates = @entries.pluck(:entry_date).compact.map(&:to_date) %>
+        <% entry_dates = @entries.map(&:entry_date).compact %>
         <% today = Date.today %>
         <% first_day = today.beginning_of_month %>
         <% last_day = today.end_of_month %>

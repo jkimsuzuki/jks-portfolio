@@ -9,22 +9,23 @@
     <div class="learnings-stats panel">
       <div class="learning-stat">
         <p class="learning-stat-label">TOTAL RESOURCES</p>
-        <p class="learning-stat-value"><%= @learnings.count %></p>
+        <p class="learning-stat-value"><%= @learnings.size %></p>
         <p class="learning-stat-sub">Curated</p>
       </div>
+      <% completed_count = @learnings.count { |l| l.progress == 100 } %>
       <div class="learning-stat">
         <p class="learning-stat-label">COMPLETED</p>
-        <p class="learning-stat-value"><%= @learnings.where(progress: 100).count %></p>
-        <p class="learning-stat-sub"><%= @learnings.count > 0 ? "#{(@learnings.where(progress: 100).count.to_f / @learnings.count * 100).round}% complete" : "0% complete" %></p>
+        <p class="learning-stat-value"><%= completed_count %></p>
+        <p class="learning-stat-sub"><%= @learnings.size > 0 ? "#{(completed_count.to_f / @learnings.size * 100).round}% complete" : "0% complete" %></p>
       </div>
       <div class="learning-stat">
         <p class="learning-stat-label">IN PROGRESS</p>
-        <p class="learning-stat-value"><%= @learnings.where.not(progress: 100).count %></p>
+        <p class="learning-stat-value"><%= @learnings.count { |l| l.progress != 100 } %></p>
         <p class="learning-stat-sub">Active</p>
       </div>
       <div class="learning-stat">
         <p class="learning-stat-label">TOPICS</p>
-        <p class="learning-stat-value"><%= @learnings.pluck(:topic).compact.uniq.count %></p>
+        <p class="learning-stat-value"><%= @learnings.map(&:topic).compact.uniq.count %></p>
         <p class="learning-stat-sub">Areas</p>
       </div>
     </div>
@@ -128,7 +129,7 @@
 
       <div class="top-categories panel">
         <p class="section-title">TOP CATEGORIES</p>
-        <% topic_counts = @learnings.pluck(:topic).compact.tally.sort_by { |_, c| -c } %>
+        <% topic_counts = @learnings.map(&:topic).compact.tally.sort_by { |_, c| -c } %>
         <% max_count = topic_counts.first&.last.to_f %>
         <% if topic_counts.any? %>
           <% topic_counts.first(5).each do |topic, count| %>

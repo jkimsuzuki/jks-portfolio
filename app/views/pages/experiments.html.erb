@@ -9,22 +9,22 @@
     <div class="experiments-stats panel">
       <div class="exp-stat">
         <p class="exp-stat-label">ACTIVE EXPERIMENTS</p>
-        <p class="exp-stat-value"><%= @experiments.where(status: "IN PROGRESS").count %></p>
+        <p class="exp-stat-value"><%= @experiments.count { |e| e.status == "IN PROGRESS" } %></p>
         <p class="exp-stat-sub">In progress</p>
       </div>
       <div class="exp-stat">
         <p class="exp-stat-label">COMPLETED</p>
-        <p class="exp-stat-value"><%= @experiments.where(status: "COMPLETE").count %></p>
+        <p class="exp-stat-value"><%= @experiments.count { |e| e.status == "COMPLETE" } %></p>
         <p class="exp-stat-sub">Shipped</p>
       </div>
       <div class="exp-stat">
         <p class="exp-stat-label">IDEAS BACKLOG</p>
-        <p class="exp-stat-value"><%= @experiments.where(status: "IDEA").count %></p>
+        <p class="exp-stat-value"><%= @experiments.count { |e| e.status == "IDEA" } %></p>
         <p class="exp-stat-sub">Planned</p>
       </div>
       <div class="exp-stat">
         <p class="exp-stat-label">TOTAL</p>
-        <p class="exp-stat-value"><%= @experiments.count %></p>
+        <p class="exp-stat-value"><%= @experiments.size %></p>
         <p class="exp-stat-sub">All time</p>
       </div>
     </div>
@@ -105,11 +105,11 @@
 
       <div class="exp-summary panel">
         <p class="section-title">EXPERIMENT SUMMARY</p>
-        <% total = @experiments.count.to_f %>
-        <% in_progress = @experiments.where(status: "IN PROGRESS").count %>
-        <% complete = @experiments.where(status: "COMPLETE").count %>
-        <% idea = @experiments.where(status: "IDEA").count %>
-        <% on_hold = @experiments.where(status: "ON HOLD").count %>
+        <% total = @experiments.size.to_f %>
+        <% in_progress = @experiments.count { |e| e.status == "IN PROGRESS" } %>
+        <% complete = @experiments.count { |e| e.status == "COMPLETE" } %>
+        <% idea = @experiments.count { |e| e.status == "IDEA" } %>
+        <% on_hold = @experiments.count { |e| e.status == "ON HOLD" } %>
         <div class="donut-wrap">
           <div class="donut-chart" style="background: conic-gradient(
             var(--c-in-progress) 0% <%= total > 0 ? (in_progress / total * 100).round : 0 %>%,
@@ -118,7 +118,7 @@
             var(--fg-dim) <%= total > 0 ? ((in_progress + complete + idea) / total * 100).round : 0 %>% 100%
           );">
             <div class="donut-hole">
-              <p class="donut-total"><%= @experiments.count %></p>
+              <p class="donut-total"><%= @experiments.size %></p>
               <p class="donut-label">Total</p>
             </div>
           </div>
