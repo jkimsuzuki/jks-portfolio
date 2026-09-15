@@ -113,7 +113,10 @@ The sidebar is persistent across all pages and always shows:
 - **Ruby on Rails 8.1.3**, ERB templates, plain CSS (no Tailwind, no JS frameworks)
 - **PostgreSQL** (local via Postgres.app for dev, **Neon** serverless Postgres for production)
 - Deployed on **Northflank** (inside signaldesk-observability project, free tier, 2 services)
-- Live URL: `p01--jks-portfolio--w2hqm5zlsbps.code.run`
+- Live URL: `https://www.jkimsuzuki.design` (custom domain, DNS at Porkbun — CNAME to
+  Northflank's per-subdomain target, TLS via Northflank's Let's Encrypt HTTP-01
+  challenge). Underlying Northflank URL `p01--jks-portfolio--w2hqm5zlsbps.code.run`
+  still works too.
 - Docker + GitHub Actions CI (CI/CD auto-deploys on push to main)
 - Ruby 4.0.3
 - No Tailwind — plain CSS with the token system above
@@ -243,7 +246,7 @@ Sections top to bottom:
 ## Current status
 **DEPLOYED. Build complete.**
 
-Live at: `p01--jks-portfolio--w2hqm5zlsbps.code.run`
+Live at: `https://www.jkimsuzuki.design` (custom domain, added this session)
 
 ### What was built
 - Full Rails 8 app with 6 pages: overview, systems, experiments, journal, learnings, about
@@ -299,6 +302,12 @@ Live at: `p01--jks-portfolio--w2hqm5zlsbps.code.run`
 - No direct production DB or Northflank shell access from local/agent tooling —
   content changes to live data go through the deployed site's own forms
   (session-cookie + CSRF-token POST), not a console
+- Custom domain: `www.jkimsuzuki.design`, registered at Porkbun. DNS managed
+  through Porkbun's Cloudflare-backed DNS panel. Northflank domain grouping
+  requires a TXT record for ownership verification, then a CNAME (host `www`)
+  pointing at the per-subdomain target Northflank gives you, then linking the
+  subdomain to the `jks-portfolio` service + port `80` in the domain's Backends
+  section. TLS is auto-issued via Let's Encrypt HTTP-01 challenge once linked.
 
 ### Dev notes
 - Postgres.app must be running before starting the local server
@@ -310,7 +319,7 @@ Live at: `p01--jks-portfolio--w2hqm5zlsbps.code.run`
 
 ### What's left
 - Journal entries still need real content (do via live site form)
-- Custom domain (optional)
+- Root domain (`jkimsuzuki.design`, no `www`) redirect to `www` — in progress
 
 Update this section at the end of every session with what was completed
 and what comes next.
