@@ -270,6 +270,9 @@ Live at: `https://www.jkimsuzuki.design` (custom domain, added this session)
   thumbnail when one exists, and a lime `↗` link icon to the live app
 - Copy pass: RIR-specific wording replaced with Resiliency-level framing across
   about.exe and overview.exe, for the LSO application (see The goal)
+- SignalDesk got its own custom domain, `signaldesk.foo` (Koyeb). All SignalDesk
+  links in the portfolio (systems.exe, experiments.exe quick actions, the
+  Experiment DB record's url) and the background/bio note repointed to it.
 
 ### Models
 - `JournalEntry` — title, body, entry_type, tags, entry_date
