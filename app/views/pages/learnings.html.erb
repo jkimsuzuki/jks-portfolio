@@ -57,6 +57,7 @@
           <%= f.select :resource_type, %w[COURSE DOCUMENTATION VIDEO ARTICLE BOOK NOTE], {}, class: "entry-input entry-select" %>
           <%= f.text_field :topic, placeholder: "Topic (e.g. RAILS, SHOPIFY)", class: "entry-input" %>
           <%= f.number_field :progress, placeholder: "Progress (0-100)", min: 0, max: 100, class: "entry-input entry-select" %>
+          <%= f.date_field :started_on, class: "entry-input", value: Date.today %>
         </div>
         <%= f.text_area :description, placeholder: "What is this resource about?", class: "entry-input entry-textarea" %>
         <%= f.text_field :url, placeholder: "URL (optional)", class: "entry-input" %>

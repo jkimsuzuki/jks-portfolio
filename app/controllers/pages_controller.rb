@@ -21,7 +21,7 @@ class PagesController < ApplicationController
   end
 
   def learnings
-    @learnings = Learning.order(created_at: :desc)
+    @learnings = Learning.order(started_on: :desc, created_at: :desc)
     @new_learning = Learning.new
   end
 end

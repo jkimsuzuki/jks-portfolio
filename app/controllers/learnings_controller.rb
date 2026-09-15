@@ -18,6 +18,6 @@ class LearningsController < ApplicationController
   private
 
   def learning_params
-    params.require(:learning).permit(:name, :resource_type, :topic, :description, :url, :progress)
+    params.require(:learning).permit(:name, :resource_type, :topic, :description, :url, :progress, :started_on)
   end
 end
