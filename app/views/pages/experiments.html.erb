@@ -63,7 +63,11 @@
         <% @experiments.each_with_index do |experiment, index| %>
           <div class="exp-item">
             <span class="exp-num">(<%= "%02d" % (index + 1) %>)</span>
-            <div class="exp-thumbnail exp-thumb-<%= experiment.status.downcase.gsub(' ', '-') %>"></div>
+            <% if experiment.name == "SignalDesk" %>
+              <%= image_tag "signaldesk-preview.png", class: "active-experiments-item-thumb", alt: "SignalDesk preview" %>
+            <% else %>
+              <div class="exp-thumbnail exp-thumb-<%= experiment.status.downcase.gsub(' ', '-') %>"></div>
+            <% end %>
             <div class="exp-details">
               <div class="exp-title-row">
                 <% if experiment.url.present? %>
