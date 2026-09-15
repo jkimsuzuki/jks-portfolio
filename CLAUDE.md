@@ -273,6 +273,17 @@ Live at: `https://www.jkimsuzuki.design` (custom domain, added this session)
 - SignalDesk got its own custom domain, `signaldesk.foo` (Koyeb). All SignalDesk
   links in the portfolio (systems.exe, experiments.exe quick actions, the
   Experiment DB record's url) and the background/bio note repointed to it.
+- Fixed slow page loads on experiments.exe/journal.exe/learnings.exe: these were
+  each firing 7-11 separate queries per request (`.where(...).count`, `.pluck`,
+  duplicate `.count` calls) instead of reusing the collection already loaded.
+  Controllers now `.to_a` the collections once; views use plain Ruby Enumerable
+  methods (`.count { }`, `.size`, `.map`) instead of ActiveRecord query methods —
+  down to 1 query per page. This alone wasn't the fix for the *visible* slowness
+  though — see the Neon region migration below, that was the real culprit.
+- Migrated the Neon database from ap-southeast-1 to us-east-2 (Ohio), matching
+  Northflank's US-Central region. Page loads on DB-backed pages dropped from
+  2-2.3s to ~0.7-0.9s, even after idle gaps that previously triggered a slow
+  reconnect. See Deployment section for details on the pooler issue encountered.
 
 ### Models
 - `JournalEntry` — title, body, entry_type, tags, entry_date
@@ -299,7 +310,13 @@ Live at: `https://www.jkimsuzuki.design` (custom domain, added this session)
 
 ### Deployment
 - Platform: Northflank (signaldesk-observability project, free tier)
-- Database: Neon (PostgreSQL 16, ap-southeast-1)
+- Database: Neon (PostgreSQL 16, us-east-2/Ohio — migrated from ap-southeast-1 this
+  session to close the distance from Northflank's US-Central service; this was the
+  fix for the 2s+ page loads on DB-backed pages, see Dev notes)
+  - Connects via the **direct** (non-pooled) connection string, not the `-pooler`
+    one — this project's pooled endpoint couldn't see the restored tables even
+    hours after migration (Neon-side issue specific to this new project), while
+    direct worked immediately. Low-traffic portfolio, so direct is fine.
 - CI/CD: auto-deploys on push to `main` via GitHub integration
 - Run `bundle exec rails db:migrate` via Northflank shell after schema changes
 - `RAILS_MASTER_KEY` and `DATABASE_URL` set as runtime secrets in Northflank
@@ -328,6 +345,11 @@ Live at: `https://www.jkimsuzuki.design` (custom domain, added this session)
 
 ### What's left
 - Journal entries still need real content (do via live site form)
+- Old Neon project (ap-southeast-1, the pre-migration database) is still sitting
+  there unused — decide whether to delete it or keep as a backup for a while
+- The new Neon project's pooled connection endpoint never started working
+  (tables invisible via `-pooler` hostname, fine via direct) — worth checking
+  again later or asking Neon support; not urgent since direct works fine here
 
 Update this section at the end of every session with what was completed
 and what comes next.
