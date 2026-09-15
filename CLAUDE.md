@@ -308,6 +308,11 @@ Live at: `https://www.jkimsuzuki.design` (custom domain, added this session)
   pointing at the per-subdomain target Northflank gives you, then linking the
   subdomain to the `jks-portfolio` service + port `80` in the domain's Backends
   section. TLS is auto-issued via Let's Encrypt HTTP-01 challenge once linked.
+  Root domain (`jkimsuzuki.design`, no `www`) redirects to `www` via Porkbun's
+  URL Forwarding (wildcard forwarding OFF — it would loop `www` through the
+  redirect too), with Porkbun's free SSL issued separately for the root so
+  `https://jkimsuzuki.design` redirects cleanly instead of failing the TLS
+  handshake before the redirect can fire.
 
 ### Dev notes
 - Postgres.app must be running before starting the local server
@@ -319,7 +324,6 @@ Live at: `https://www.jkimsuzuki.design` (custom domain, added this session)
 
 ### What's left
 - Journal entries still need real content (do via live site form)
-- Root domain (`jkimsuzuki.design`, no `www`) redirect to `www` — in progress
 
 Update this section at the end of every session with what was completed
 and what comes next.
