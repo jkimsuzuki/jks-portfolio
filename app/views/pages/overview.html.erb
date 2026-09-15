@@ -74,9 +74,21 @@
       <p class="section-title">ACTIVE EXPERIMENTS</p>
       <ol class="active-experiments-list">
         <% if @experiments.any? %>
-          <% @experiments.each do |experiment| %>
+          <% @experiments.each_with_index do |experiment, index| %>
             <li class="active-experiments-item">
-              <span class="active-experiments-item-title"><%= experiment.name %></span>
+              <span class="exp-num">(<%= "%02d" % (index + 1) %>)</span>
+              <% if experiment.name == "SignalDesk" %>
+                <%= image_tag "signaldesk-preview.png", class: "active-experiments-item-thumb", alt: "SignalDesk preview" %>
+              <% else %>
+                <div class="exp-thumbnail exp-thumb-<%= experiment.status.downcase.gsub(' ', '-') %>"></div>
+              <% end %>
+              <% if experiment.url.present? %>
+                <a href="<%= experiment.url %>" target="_blank" rel="noopener" class="active-experiments-item-title active-experiments-item-link">
+                  <span class="active-experiments-item-icon">↗</span><%= experiment.name %>
+                </a>
+              <% else %>
+                <span class="active-experiments-item-title"><%= experiment.name %></span>
+              <% end %>
               <span class="tag tag-<%= experiment.status.downcase.gsub(' ', '-') %>"><%= experiment.status %></span>
               <span class="active-experiments-item-subtitle"><%= experiment.description %></span>
             </li>
