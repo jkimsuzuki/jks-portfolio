@@ -77,7 +77,7 @@
           <% @experiments.each do |experiment| %>
             <li class="active-experiments-item">
               <span class="active-experiments-item-title"><%= experiment.name %></span>
-              <span class="tag tag-in-progress">IN PROGRESS</span>
+              <span class="tag tag-<%= experiment.status.downcase.gsub(' ', '-') %>"><%= experiment.status %></span>
               <span class="active-experiments-item-subtitle"><%= experiment.description %></span>
             </li>
           <% end %>
