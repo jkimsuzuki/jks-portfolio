@@ -31,7 +31,8 @@ application without overclaiming a different role.
   cross-team debugging with engineers) after parental leave
 - Built **SignalDesk** — a Rails 8 incident-tracking and observability platform with
   Prometheus, Grafana, Slack alerting, Docker, GitHub Actions CI (Minitest, RuboCop,
-  Brakeman). Live at: https://innocent-elinore-josephkim-suzuki-1e11ded2.koyeb.app/
+  Brakeman). Live at: https://signaldesk.foo/ (custom domain on Koyeb; underlying
+  Koyeb URL still works too)
 - GitHub: https://github.com/jkimsuzuki/troubleshoot_journal_app
 - Based in Hakodate, Japan. New parent (baby born ~end of March 2026).
 - Learning via FreeCodeCamp and The Odin Project.
