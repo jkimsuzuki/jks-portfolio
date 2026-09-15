@@ -7,15 +7,20 @@ You are **Ren** — that's what I call you. Refer to yourself as Ren.
 ---
 
 ## The goal
-This portfolio exists for one reason: to get hired as a
-**Resiliency Incident Response (RIR) Engineer at Shopify, APAC**.
+This portfolio exists for one reason: to get hired at Shopify APAC, in
+**Resiliency** — specifically the **Live Site Operations (LSO) Specialist** role,
+which I'm actively applying for (not RIR; LSO and RIR are both under Resiliency).
 
 I have a direct connection: my friend **Adam** works at Shopify as an SRE and
 referred me. I interviewed for the EMEA RIR role, didn't land it, and have been
-building toward it since. **KB Osahan** (Senior Lead, Resiliency Incident Response
-at Shopify) told me to develop technical troubleshooting and customer support skills
-and that he'll flag APAC openings to Adam. Every piece of this portfolio is pointed
-at that conversation.
+building toward Resiliency since. **KB Osahan** (Senior Lead, Resiliency Incident
+Response at Shopify) told me to develop technical troubleshooting and customer
+support skills and that he'll flag APAC openings to Adam. Every piece of this
+portfolio is pointed at that conversation.
+
+Portfolio copy was originally written around RIR specifically; it's since been
+updated to Resiliency-level framing (see Current status) to match the LSO
+application without overclaiming a different role.
 
 ---
 
@@ -252,11 +257,21 @@ Live at: `p01--jks-portfolio--w2hqm5zlsbps.code.run`
 - Journal page with calendar showing days with entries
 - Learnings page with progress bars and category breakdown
 - Sidebar: logo, nav links, `> _` cursor (mission block removed)
+- Real content added: 2 experiments (SignalDesk, TSU @ the table gallery — Joseph's
+  family's gallery site), 7 learnings (courses/certifications from KodeKloud, Udemy,
+  Conduktor, The Odin Project, FreeCodeCamp, Codecademy), Snowflake added to systems.exe
+- Overview's Active Experiments panel: real per-item status tag (was hardcoded to
+  "IN PROGRESS"), now pulls the 3 most recent experiments of any status (was
+  `IN PROGRESS`-only), each with a numbered `(01)` prefix, a real screenshot
+  thumbnail when one exists, and a lime `↗` link icon to the live app
+- Copy pass: RIR-specific wording replaced with Resiliency-level framing across
+  about.exe and overview.exe, for the LSO application (see The goal)
 
 ### Models
 - `JournalEntry` — title, body, entry_type, tags, entry_date
 - `Experiment` — name, description, status, experiment_date, url
-- `Learning` — name, resource_type, topic, description, url, progress
+- `Learning` — name, resource_type, topic, description, url, progress, started_on
+  (added this session — learnings.exe now sorts by `started_on desc`, not `created_at`)
 
 ### Key design decisions
 - cases.exe removed — all cases live in SignalDesk
@@ -267,6 +282,13 @@ Live at: `p01--jks-portfolio--w2hqm5zlsbps.code.run`
   - Northflank not on CDN — text fallback `NF`
 - `database.yml` production uses `DATABASE_URL` env var pointing to Neon
   - Solid Cache/Queue/Cable all inherit the same Neon URL via YAML anchors
+- Experiment thumbnails use a filename convention, not a DB field: `ApplicationHelper
+  #experiment_thumbnail` looks for `app/assets/images/<experiment.name.parameterize>-preview.png`
+  and falls back to the plain status-colored `.exp-thumbnail` block if it doesn't
+  exist. Renaming an experiment means renaming its asset to match.
+- `ExperimentsController` and `LearningsController` only have `create`/`destroy` —
+  no `update`/edit. Correcting an existing record's data means deleting it and
+  recreating it with the right fields (only real path available given current routes).
 
 ### Deployment
 - Platform: Northflank (signaldesk-observability project, free tier)
@@ -274,14 +296,20 @@ Live at: `p01--jks-portfolio--w2hqm5zlsbps.code.run`
 - CI/CD: auto-deploys on push to `main` via GitHub integration
 - Run `bundle exec rails db:migrate` via Northflank shell after schema changes
 - `RAILS_MASTER_KEY` and `DATABASE_URL` set as runtime secrets in Northflank
+- No direct production DB or Northflank shell access from local/agent tooling —
+  content changes to live data go through the deployed site's own forms
+  (session-cookie + CSRF-token POST), not a console
 
 ### Dev notes
 - Postgres.app must be running before starting the local server
 - `--lime-dim` is `#829e1e`
 - `--lime-darker: #192000` for hover/active nav state
+- Puma renames its process title, so `pkill -f "rails server -p <port>"` will NOT
+  kill a locally-started dev server — find the real PID via `lsof -i :<port>` first,
+  or a "restarted" server may actually still be the stale prior process
 
 ### What's left
-- Add content: experiments, journal entries, learnings (do via live site forms)
+- Journal entries still need real content (do via live site form)
 - Custom domain (optional)
 
 Update this section at the end of every session with what was completed
