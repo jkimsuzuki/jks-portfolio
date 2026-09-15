@@ -1,6 +1,6 @@
 class PagesController < ApplicationController
   def overview
-    @experiments = Experiment.where(status: "IN PROGRESS").order(created_at: :desc).limit(3)
+    @experiments = Experiment.order(created_at: :desc).limit(3)
     @project_count = Experiment.count
   end
 
