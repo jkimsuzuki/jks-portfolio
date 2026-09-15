@@ -63,8 +63,8 @@
         <% @experiments.each_with_index do |experiment, index| %>
           <div class="exp-item">
             <span class="exp-num">(<%= "%02d" % (index + 1) %>)</span>
-            <% if experiment.name == "SignalDesk" %>
-              <%= image_tag "signaldesk-preview.png", class: "active-experiments-item-thumb", alt: "SignalDesk preview" %>
+            <% if (thumb = experiment_thumbnail(experiment)) %>
+              <%= image_tag thumb, class: "active-experiments-item-thumb", alt: "#{experiment.name} preview" %>
             <% else %>
               <div class="exp-thumbnail exp-thumb-<%= experiment.status.downcase.gsub(' ', '-') %>"></div>
             <% end %>
