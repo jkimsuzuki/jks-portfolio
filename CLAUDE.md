@@ -292,6 +292,13 @@ Live at: `https://www.jkimsuzuki.design` (custom domain, added this session)
   updated automatically. Also added its thumbnail,
   `app/assets/images/epuis-co-shopify-storefront-preview.png`, committed to git like
   the other two preview images.
+- Fixed that thumbnail's crop: the source was a wide 900x255 "About" text banner, and
+  the shared `.active-experiments-item-thumb` CSS (`object-fit: cover; object-position:
+  top left`) only showed the far-left sliver ("Ab..."). Fixed by center-cropping the
+  source PNG itself to the thumbnail's 10:7 box ratio (900x255 → 364x255 via `sips -c`)
+  instead of touching the shared CSS, so SignalDesk/TSU's cropping is unaffected. If a
+  future thumbnail looks cut off, check the source image's aspect ratio against the
+  80x56 (10:7) box before assuming the CSS is wrong.
 
 ### Models
 - `JournalEntry` — title, body, entry_type, tags, entry_date
