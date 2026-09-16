@@ -284,6 +284,14 @@ Live at: `https://www.jkimsuzuki.design` (custom domain, added this session)
   Northflank's US-Central region. Page loads on DB-backed pages dropped from
   2-2.3s to ~0.7-0.9s, even after idle gaps that previously triggered a slow
   reconnect. See Deployment section for details on the pooler issue encountered.
+- Added a 3rd experiment: épuis & co. — Shopify Storefront (IN PROGRESS, no url yet),
+  a custom Shopify Liquid theme for Joseph's family flower shop/gallery in Hakodate.
+  Submitted via the live site's own form (per the no-console-access rule below), so
+  no view files changed — experiments.exe and overview.exe already loop over
+  `Experiment` records and the PROJECTS stat is `Experiment.count`, so all three
+  updated automatically. Also added its thumbnail,
+  `app/assets/images/epuis-co-shopify-storefront-preview.png`, committed to git like
+  the other two preview images.
 
 ### Models
 - `JournalEntry` — title, body, entry_type, tags, entry_date
